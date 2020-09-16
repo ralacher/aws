@@ -19,6 +19,6 @@ jobs:
       uses: docker/build-push-action@v1.1.1
       with:
         username: rlacher
-        password: ${{ secrets.DOCKER_HUB_PAT }
+        password: ${{ secrets.DOCKER_HUB_PAT }}
         path: containers/app
         push: true
