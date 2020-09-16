@@ -23,7 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run tests
-        run: docker build $DOCKERFILE_PATH --file Dockerfile
+        run: |
+          cd containers/app
+          docker build . --file Dockerfile
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
@@ -35,7 +37,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build image
-        run: docker build $DOCKERfILE_PATH --file Dockerfile --tag $IMAGE_NAME
+        run: |
+          cd containers/app
+          docker build . --file Dockerfile --tag $IMAGE_NAME
 
       - name: Log into GitHub Container Registry
       # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
