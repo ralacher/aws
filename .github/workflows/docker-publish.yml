@@ -72,11 +72,15 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
-      - uses: docker/build-push-action@v1.1.1
-        with:
-          username: rlacher
-          password: ${{ secrets.DOCKER_HUB_PAT }}
-          repository: getting-started
-          tags: latest
-          path: containers/app
-          push: true
+      - uses: actions/checkout@v2
+      - name: Build image
+        run: |
+          cd containers/app
+          docker build . --file Dockerfile --tag $IMAGE_NAME
+
+      - name: Log into DockerHub
+      # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
+        run: echo "${{ secrets.DOCKER_HUB_PAT }}" | docker login -u rlacher --password-stdin
+
+      - name: Push image to GitHub Container Registry
+        run: docker push rlacher/getting-started
