@@ -29,7 +29,7 @@ jobs:
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
-  push_github:
+  push_github_packages:
     # Ensure test job passes before pushing image.
     needs: test
     runs-on: ubuntu-latest
@@ -66,7 +66,29 @@ jobs:
 
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
-          
+ 
+  # Push image to GitHub Packages.
+  # See also https://docs.docker.com/docker-hub/builds/
+  push_github_repo:
+    # Ensure test job passes before pushing image.
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build image
+        run: |
+          cd containers/app
+          docker build . --file Dockerfile --tag getting-started
+
+      - name: Log into GitHub Container Registry
+      # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
+        run: echo "${{ secrets.GIT_HUB_PAT }}" | docker login docker.pkg.github.com -u ralacher --password-stdin
+
+      - name: Push image to GitHub Packages
+        run: |
+          docker push docker.pkg.github.com/ralacher/aws/getting-started:latest
+ 
   push_dockerhub:
     needs: test
     runs-on: ubuntu-latest
@@ -82,5 +104,5 @@ jobs:
       # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
         run: echo "${{ secrets.DOCKER_HUB_PAT }}" | docker login -u rlacher --password-stdin
 
-      - name: Push image to GitHub Container Registry
+      - name: Push image to DockerHub
         run: docker push rlacher/getting-started
