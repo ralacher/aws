@@ -1,0 +1,24 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - containers/app/**
+  pull_request:
+    branches: [ master ]  
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v1.1.1
+      with:
+        username: rlacher
+        password: ${{ secrets.DOCKER_HUB_PAT }
+        path: containers/app
+        push: true
