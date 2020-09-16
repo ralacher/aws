@@ -76,7 +76,7 @@ jobs:
       - name: Build image
         run: |
           cd containers/app
-          docker build . --file Dockerfile --tag getting-started
+          docker build . --file Dockerfile --tag rlacher/getting-started
 
       - name: Log into DockerHub
       # TODO: Create a PAT with `read:packages` and `write:packages` scopes and save it as an Actions secret `CR_PAT`
