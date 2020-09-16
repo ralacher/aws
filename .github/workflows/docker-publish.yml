@@ -76,7 +76,7 @@ jobs:
         with:
           username: rlacher
           password: ${{ secrets.DOCKER_HUB_PAT }}
-          repository: $IMAGE_NAME
+          repository: getting-started
           tags: latest
-          path: $DOCKERFILE_PATH
+          path: containers/app
           push: true
