@@ -87,6 +87,7 @@ jobs:
 
       - name: Push image to GitHub Packages
         run: |
+          docker tag getting-started docker.pkg.github.com/ralacher/aws/getting-started:latest
           docker push docker.pkg.github.com/ralacher/aws/getting-started:latest
  
   push_dockerhub:
