@@ -2,5 +2,12 @@
 **/.terraform/
 **.tfstate*
 
+# Node
+**/node_modules/
+**/package-lock.json
+
+# VS Code
+**/.vscode
+
 # Misc
 **/.DS_Store
